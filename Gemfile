@@ -24,7 +24,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 # gem 'rack-cors'
 
 gem 'mongoid', '~> 7.0'
-gem 'simple_enum', '~> 2.3.0' , require: 'simple_enum/mongoid'
+gem 'enumerize'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
