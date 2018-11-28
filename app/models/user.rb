@@ -3,12 +3,14 @@ class User
   include Mongoid::Timestamps::Created
   include Mongoid::Timestamps::Updated
   include ActiveModel::SecurePassword
+  include SimpleEnum::Mongoid
 
   field :first_name, type: String
   field :last_name, type: String
   field :display_name, type: String
   field :email, type: String
   field :username, type: String
+  as_enum :role, %i[patient doctor admin], source: 'roles', field: { type: String, default: 'patient' }
   field :password_digest, type: String
 
   has_secure_password
