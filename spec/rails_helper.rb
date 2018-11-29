@@ -22,7 +22,7 @@ require 'mongoid-rspec'
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-# Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 
 # configure shoulda matchers to use rspec as the test framework and full matcher libraries for rails
 Shoulda::Matchers.configure do |config|
@@ -48,6 +48,9 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/docs
 
   config.include Mongoid::Matchers, type: :model
+
+  config.include RequestSpecHelper
+  config.include ControllerSpecHelper
 
   config.infer_spec_type_from_file_location!
 
