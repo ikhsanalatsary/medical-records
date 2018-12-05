@@ -6,7 +6,9 @@ RSpec.describe AuthenticateUser do
   # valid request object
   subject(:valid_auth_obj) { described_class.new(user.email, user.password) }
   # invalid request subject
-  subject(:invalid_auth_obj) { described_class.new('foo', 'bar') }
+  subject(:invalid_auth_obj) { described_class.new(user.email, 'bar') }
+  # invalid email
+  subject(:invalid_auth_email) { described_class.new('foo', user.password) }
 
   # Test suite for AuthenticateUser#call
   describe '#call' do
@@ -22,8 +24,18 @@ RSpec.describe AuthenticateUser do
       it 'raises an authentication error' do
         expect { invalid_auth_obj.call }
           .to raise_error(
-            Mongoid::Errors::DocumentNotFound,
-            /Document not found/
+            ExceptionHandler::AuthenticationError,
+            /Invalid credentials/
+          )
+      end
+    end
+
+    context 'when invalid email' do
+      it 'raises an not found error' do
+        expect { invalid_auth_email.call }
+          .to raise_error(
+            ExceptionHandler::AuthenticationError,
+            /not found/
           )
       end
     end

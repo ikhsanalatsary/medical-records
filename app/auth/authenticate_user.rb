@@ -14,7 +14,12 @@ class AuthenticateUser
   attr_reader :email, :password
   def user
     user = User.find_by(email: email)
-    user.authenticate(password)
+  rescue Mongoid::Errors::DocumentNotFound
+    raise(ExceptionHandler::AuthenticationError, Message.not_found)
+  else
+    return user if user.authenticate(password)
+
+    # raise Authentication error if credentials are invalid
+    raise(ExceptionHandler::AuthenticationError, Message.invalid_credentials)
   end
-  
 end
