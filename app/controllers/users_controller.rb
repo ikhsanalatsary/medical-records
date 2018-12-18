@@ -17,10 +17,12 @@ class UsersController < ApplicationController
       :first_name,
       :last_name,
       :username,
-      :roles,
+      { roles: [] },
       :email,
       :password,
       :password_confirmation
     )
   end
 end
+
+# email: "ikhsan@123.com", first_name: "Abdul Fattah", last_name: "Ikhsan", password: "12345678", roles: (2) ["admin", "doctor"], username: "ikhsan"
