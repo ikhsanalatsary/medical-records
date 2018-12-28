@@ -4,7 +4,30 @@ class UsersController < ApplicationController
   # POST /signup
   # return authenticated token upon signup
   def create
+    date = Time.new
+    year = date.year
+    month = date.month
+    day = date.day
+    tomorrow = day + 1
     user = User.create!(user_params)
+    # create patient
+    if user_params[:roles].nil?
+      p_count = Patient.where(
+        created: {
+          '$gte': Time.new(year, month, day),
+          '$lt': Time.new(year, month, tomorrow)
+        }
+      ).count
+      counter = p_count + 1
+      count_str = counter.to_s
+      suffix = Array.new(math_max(4 - count_str.length + 1, 0)).join('0') + count_str
+      mrn = "MRN-#{date.strftime('%y%m%d')}-#{suffix}"
+      Patient.create!(
+        medical_record_number: mrn,
+        user: user._id,
+        name: user.display_name
+      )
+    end
     auth_token = AuthenticateUser.new(user.email, user.password).call
     response = { message: Message.account_created, auth_token: auth_token }
     json_response(response, :created)
@@ -22,6 +45,10 @@ class UsersController < ApplicationController
       :password,
       :password_confirmation
     )
+  end
+
+  def math_max(*values)
+    values.max
   end
 end
 

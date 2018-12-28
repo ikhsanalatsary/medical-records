@@ -12,6 +12,7 @@ class User
   field :username, type: String
   field :roles
   enumerize :roles, in: %i[patient doctor admin], multiple: true, default: :patient
+  has_one :patient
   field :password_digest, type: String
 
   has_secure_password
