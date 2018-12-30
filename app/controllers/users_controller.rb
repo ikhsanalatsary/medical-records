@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     tomorrow = day + 1
     user = User.create!(user_params)
     # create patient
-    if user_params[:roles].nil?
+    if user.roles.texts[0] == 'Patient'
       p_count = Patient.where(
         created: {
           '$gte': Time.new(year, month, day),
@@ -25,6 +25,7 @@ class UsersController < ApplicationController
       Patient.create!(
         medical_record_number: mrn,
         user: user._id,
+        created_by: user._id,
         name: user.display_name
       )
     end
