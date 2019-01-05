@@ -1,6 +1,15 @@
 # app/controllers/users_controller.rb
 class UsersController < ApplicationController
   skip_before_action :authorize_request, only: :create
+  wrap_parameters :user, include: [
+    :first_name,
+    :last_name,
+    :username,
+    { roles: [] },
+    :email,
+    :password,
+    :password_confirmation
+  ]
   # POST /signup
   # return authenticated token upon signup
   def create
@@ -37,7 +46,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.permit(
+    params.require(:user).permit(
       :first_name,
       :last_name,
       :username,
